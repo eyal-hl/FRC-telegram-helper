@@ -8,7 +8,7 @@ const URL = process.env.URL;
 
 const bot = new Telegraf(process.env.BOT_TOKEN)
 bot.use(async (ctx, next) => {
-    console.log(ctx);
+    
     next();
 })
 
