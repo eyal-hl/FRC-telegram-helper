@@ -1,0 +1,26 @@
+{
+  "name": "telegram-bot",
+  "version": "1.0.0",
+  "description": "My first telegram bot",
+  "main": "index.js",
+  "dependencies": {
+    "telegraf": "^4.7.0"
+  },
+  "devDependencies": {
+    "dotenv": "^16.0.0"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/eyal-hl/telegram-bot.git"
+  },
+  "author": "Eyalhl",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/eyal-hl/telegram-bot/issues"
+  },
+  "homepage": "https://github.com/eyal-hl/telegram-bot#readme"
+}
