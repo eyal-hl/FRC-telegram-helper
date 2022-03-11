@@ -6,9 +6,6 @@ const { Telegraf } = require('telegraf')
 const PORT = process.env;
 const HEROKU_URL = process.env.HEROKU_URL;
 
-
-  
-
 const bot = new Telegraf(process.env.BOT_TOKEN)
 bot.use(async (ctx:Context, next:()=>Promise<void>) => {
     console.log(ctx);
