@@ -28,7 +28,7 @@ if (process.env.HEROKU == undefined) {
     bot.launch();
 }
 else {
-    bot.telegram.setWebhook(`${URL}/bot${process.env.BOT_TOKEN}`);
+    bot.telegram.setWebhook(`${HEROKU_URL}/bot${process.env.BOT_TOKEN}`);
     bot.startWebhook(`/bot${process.env.BOT_TOKEN}`, null, PORT);
 }
 process.once('SIGINT', () => bot.stop('SIGINT'));
