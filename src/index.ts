@@ -19,10 +19,16 @@ bot.hears('hi', (ctx:Context) => ctx.reply('Hey there'))
 if (process.env.HEROKU == undefined){
     bot.launch()
 }else{
-    console.log("2");
-    bot.telegram.setWebhook(`${HEROKU_URL}/bot${process.env.BOT_TOKEN}`);
-    console.log("3");
-    bot.startWebhook(`/bot${process.env.BOT_TOKEN}`, null, PORT)
+    bot.launch({
+        webhook: {
+          domain: HEROKU_URL,
+          port: PORT
+        }
+      })
+    // console.log("2");
+    // bot.telegram.setWebhook(`${HEROKU_URL}/bot${process.env.BOT_TOKEN}`);
+    // console.log("3");
+    // bot.startWebhook(`/bot${process.env.BOT_TOKEN}`, null, PORT)
 }
 console.log("4");
 
