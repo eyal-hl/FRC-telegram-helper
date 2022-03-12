@@ -1,11 +1,7 @@
-
-
 import { Context, NarrowedContext } from "telegraf";
 
 if (process.env.HEROKU == undefined){ require('dotenv').config(); }
-
-
-
+console.log("1");
 const { Telegraf } = require('telegraf')
 const PORT = process.env;
 const HEROKU_URL = process.env.HEROKU_URL;
@@ -25,6 +21,7 @@ if (process.env.HEROKU == undefined){
 }else{
     console.log("2");
     bot.telegram.setWebhook(`${HEROKU_URL}/bot${process.env.BOT_TOKEN}`);
+    console.log("3");
     bot.startWebhook(`/bot${process.env.BOT_TOKEN}`, null, PORT)
 }
 console.log("4");
