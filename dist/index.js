@@ -9,23 +9,24 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-console.log("1");
 if (process.env.HEROKU == undefined) {
     require('dotenv').config();
 }
-console.log("2");
 const { Telegraf } = require('telegraf');
 const PORT = process.env;
 const HEROKU_URL = process.env.HEROKU_URL;
 const bot = new Telegraf(process.env.BOT_TOKEN);
+console.log("1");
 bot.use((ctx, next) => __awaiter(void 0, void 0, void 0, function* () {
     console.log(ctx);
     next();
 }));
+console.log("2");
 bot.start((ctx) => ctx.reply('Welcome'));
 bot.help((ctx) => ctx.reply('Send me a sticker'));
 bot.on('sticker', (ctx) => ctx.reply('👍'));
 bot.hears('hi', (ctx) => ctx.reply('Hey there'));
+console.log("3");
 if (process.env.HEROKU == undefined) {
     bot.launch();
 }
@@ -33,6 +34,7 @@ else {
     bot.telegram.setWebhook(`${HEROKU_URL}/bot${process.env.BOT_TOKEN}`);
     bot.startWebhook(`/bot${process.env.BOT_TOKEN}`, null, PORT);
 }
+console.log("4");
 process.once('SIGINT', () => bot.stop('SIGINT'));
 process.once('SIGTERM', () => bot.stop('SIGTERM'));
 //# sourceMappingURL=index.js.map
