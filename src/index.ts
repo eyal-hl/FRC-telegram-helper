@@ -1,6 +1,10 @@
+console.log("1");
+
 import { Context, NarrowedContext } from "telegraf";
 
 if (process.env.HEROKU == undefined){ require('dotenv').config(); }
+console.log("2");
+
 
 const { Telegraf } = require('telegraf')
 const PORT = process.env;
