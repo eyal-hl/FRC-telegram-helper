@@ -1,8 +1,11 @@
-let no_param:{[name:string]: ()=>{}} = {}
-let one_param:{[name:string]: (one:string)=>string} = {"team":team, "match":match}
+import {team, match} from './BL/TBA/teams'
+import {eventsYear} from './BL/TBA/events'
+const no_param:{[name:string]: ()=>{}} = {}
+const one_param:{[name:string]: (one:string)=>Promise<string>} = {"team":team, "match":match, "events": eventsYear}
 
-export function router(text:string):string {
-    let texts:string[] = text.split(" ")
+export const router = async(text:string):Promise<string> => {
+    let texts:string[] = text.split(" ");
+    texts[0] = texts[0].toLowerCase();
     
     switch (texts.length) {
         case 1:
@@ -10,7 +13,7 @@ export function router(text:string):string {
             break;
         case 2:
             if (Object.keys(one_param).includes(texts[0])){
-                return one_param[texts[0]](texts[1])
+                return await one_param[texts[0]](texts[1])
             }
             break;
         default:
@@ -18,13 +21,4 @@ export function router(text:string):string {
             break;
     }
     return "Unknown command"
-}
-
-
-function team(value:string):string{
-    return value+"as"
-}
-
-function match(match:string):string{
-    return match+"sfafasfsa"
 }
