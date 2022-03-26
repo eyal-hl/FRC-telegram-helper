@@ -4,6 +4,7 @@
   "description": "My first telegram bot",
   "main": "index.ts",
   "dependencies": {
+    "axios": "^0.26.1",
     "telegraf": "^4.7.0"
   },
   "devDependencies": {
