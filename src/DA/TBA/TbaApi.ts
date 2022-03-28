@@ -21,8 +21,9 @@ class MainApiProtected extends HttpClient {
     return config;
   };
 
-  public getTeams = (team:string) => this.instance.get(`/team/frc${team}`)
+  public getTeams = (team:string):Promise<TeamSimple> => this.instance.get(`/team/frc${team}`)
   public getEventsSimple = (year:string):Promise<EventSimple[]> => this.instance.get(`events/${year}/simple`)
+  public getMatchesTeamYear = (team:string, year:string):Promise<Match[]> => this.instance.get(`team/frc${team}/matches/${year}`)
 }
 
 export const api = new MainApiProtected();
