@@ -21,7 +21,9 @@ const splitMessage = (message:string):string[] => {
 
     return reply
 }
+const helpMessage = `matches {teams seperated by ','} - will return you all future matches of those teams sorted by amount of favorite teams in match and then by time, for example "matches 1937,254"
 
+allmatches {teams seperated by ','} - same us above but all matches instead of only future once, for example "allmatches 1937,254"`
 
 const PORT = process.env.PORT || "3000";
 const HEROKU_URL = process.env.HEROKU_URL;
@@ -31,11 +33,13 @@ bot.use(async (ctx:Context, next:()=>Promise<void>) => {
     next();
 })
 
-bot.start((ctx:Context) => ctx.reply('Welcome'))
-bot.help((ctx:Context) => ctx.reply('Send me a sticker'))
+bot.start((ctx:Context) => ctx.reply('Welcome, type "/help" for commands'))
+bot.help((ctx:Context) => ctx.reply(helpMessage))
 bot.on('sticker', (ctx:Context) => ctx.reply('👍'))
 bot.hears('hi', (ctx:Context) => ctx.reply('Hey there'))
 bot.on('text', async (ctx)=>{
+    console.log(`${ctx.message.chat.id}: ${ctx.message.text}`);
+    
     splitMessage(await router(ctx.message.text)).forEach(async line => await ctx.reply(line))
 })
 
