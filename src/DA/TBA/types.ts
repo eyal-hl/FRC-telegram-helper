@@ -120,3 +120,32 @@ interface EventSimple {
     surrogate_team_keys: any[];
     team_keys: string[];
   }
+
+  interface EventRanking {
+    extra_stats_info: Extrastatsinfo[];
+    rankings: Ranking[];
+    rp_score?: number;
+    event_name?: string;
+  }
+  
+  interface Ranking {
+    dq: number;
+    extra_stats: number[];
+    matches_played: number;
+    qual_average?: any;
+    rank: number;
+    record: MatchesRecord;
+    sort_orders: number[];
+    team_key: string;
+  }
+  
+  interface MatchesRecord {
+    losses: number;
+    ties: number;
+    wins: number;
+  }
+  
+  interface Extrastatsinfo {
+    name: string;
+    precision: number;
+  }
