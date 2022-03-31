@@ -21,9 +21,15 @@ const splitMessage = (message:string):string[] => {
 
     return reply
 }
-const helpMessage = `matches {teams seperated by ','} - will return you all future matches of those teams sorted by amount of favorite teams in match and then by time, for example "matches 1937,254"
+const helpMessage = `All times are in israel time
 
-allmatches {teams seperated by ','} - same us above but all matches instead of only future once, for example "allmatches 1937,254"`
+
+
+matches {teams seperated by ','} - will return you all future matches of those teams sorted by amount of favorite teams in match and then by time, for example "matches 1937,254"
+
+allmatches {teams seperated by ','} - same us above but all matches instead of only future once, for example "allmatches 1937,254"
+
+eventscore {year} - will rank all events in the year based on the average rp score for team in the event (strengh of event)`
 
 const PORT = process.env.PORT || "3000";
 const HEROKU_URL = process.env.HEROKU_URL;
