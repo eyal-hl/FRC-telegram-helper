@@ -1,5 +1,6 @@
 import { time } from 'console';
 import {api} from '../../DA/TBA/TbaApi'
+import { getEvent } from './events';
 const formatAlliance = (alliance:Alliance):string=> `${alliance.team_keys.map(key=>key.slice(3)).join(' ')}`
 
 const addDateBetweenGames = (matches_array:Match[]):(Match|Date)[] => {
@@ -16,17 +17,35 @@ const addDateBetweenGames = (matches_array:Match[]):(Match|Date)[] => {
 
     return result;
 }
-const formatFutureMatch = (match:Match):string => {
-    const formatTime = (date:Date):string=>`${date.getHours().toString().padStart(2,'0')}:${date.getMinutes().toString().padStart(2,'0')}`;
-    return `${match.match_number}. ${formatTime(new Date(match.predicted_time))} - ${formatAlliance(match.alliances.blue)} vs ${formatAlliance(match.alliances.red)} ${match.favorite_teams!=1?match.favorite_teams:""}`
-}
 
-function formatMatchOrDate(matchOrDate:any):string{ // the type is match or a Date
+async function formatMatchOrDate(matchOrDate:any):Promise<string>{ // the type is match or a Date
+    const formatVideos = (videos:Video[]):string => {
+        if (videos.length < 1){
+            return "No videos on TBA"
+        }
+        return videos.map(video => {
+            switch (video.type) {
+                case "youtube":
+                    return `https://youtu.be/${video.key}`
+                default:
+                    console.log(`Unknown video type ${video.type}`);
+                    return `Unknown video type ${video.type}`
+            }
+        }).join("\n")
+    }
+    const formatMatchName = async(match:Match):Promise<string> => {
+        const dict:{[id: string]:string} = {"f":"Final", "qf":"Quarter Final", "sf":"Semi Final", "qm": "Qualification Match"};
+        return `${(await getEvent(match.event_key)).name} ${dict[match.comp_level]} ${match.match_number}`;
+    }
     const formatTime = (date:Date):string=>`${date.getHours().toString().padStart(2,'0')}:${date.getMinutes().toString().padStart(2,'0')}`;
     if (matchOrDate instanceof Date){
-        return matchOrDate.toDateString();
+        return "\n" + matchOrDate.toDateString();
     }
-    return `${matchOrDate.match_number} ${formatTime(new Date(matchOrDate.predicted_time))} - ${formatAlliance(matchOrDate.alliances.blue)} vs ${formatAlliance(matchOrDate.alliances.red)} ${matchOrDate.favorite_teams!=1?matchOrDate.favorite_teams:""}`
+    const match:Match = matchOrDate;
+    if (match.winning_alliance == ""){
+        return `${match.match_number} ${formatTime(new Date(match.predicted_time))} - ${formatAlliance(match.alliances.blue)} vs ${formatAlliance(match.alliances.red)} ${match.favorite_teams!=1?match.favorite_teams:""}`
+    }
+    return `${await formatMatchName(match)} ${formatTime(new Date(match.predicted_time))}\n${formatAlliance(match.alliances.blue)} ${match.alliances.blue.score} vs ${match.alliances.red.score} ${formatAlliance(match.alliances.red)} ${match.favorite_teams!=1?match.favorite_teams:""}\n${formatVideos(match.videos)}`
 }
 
 const sortedMatches = async(teams:string):Promise<Match[]> => {
@@ -37,17 +56,15 @@ const sortedMatches = async(teams:string):Promise<Match[]> => {
 export const futureMatches = async(teams:string):Promise<string> => {
     const yesterDay = new Date()
     yesterDay.setTime(yesterDay.getTime() - 86400000); // 1 day in ms
-    let result:(Match|Date)[] = addDateBetweenGames((await sortedMatches(teams)).filter(match=>match.winning_alliance===""&& match.predicted_time > yesterDay.valueOf()))
-    return result.map(formatMatchOrDate).join('\n');
+    let result:Promise<string>[] = addDateBetweenGames((await sortedMatches(teams)).filter(match=>match.winning_alliance===""&& match.predicted_time > yesterDay.valueOf())).map(formatMatchOrDate);
+    return (await Promise.all(result)).join('\n');
 };
 
-export const allMatches =async (teams:string) => {
-    let result:(Match|Date)[] = addDateBetweenGames((await sortedMatches(teams)));
-    return result.map(formatMatchOrDate).join('\n');
+export const allMatches =async (teams:string): Promise<string> => {
+    let result:Promise<string>[] = addDateBetweenGames((await sortedMatches(teams))).map(formatMatchOrDate);
+    
+    return (await Promise.all(result)).join('\n');
 };
-
-
-
 
 export const matches = async(teams:string, year:string):Promise<Match[]> => {
     let matches:Match[] = [];
