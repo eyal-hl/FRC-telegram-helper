@@ -22,5 +22,8 @@ export const router = async(text:string):Promise<string> => {
             
             break;
     }
+    if (texts.length > 1){
+        return router([texts[0] + texts[1], ...texts.slice(2)].join(" "))
+    }
     return "Unknown command"
 }
