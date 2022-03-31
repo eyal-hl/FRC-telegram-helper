@@ -54,3 +54,7 @@ export const eventRpRank = async(year:string):Promise<string> => {
     return eventRp.sort((a,b) => (b.rp_score||0)-(a.rp_score||0)).map((event,index)=> `${index+1}. ${event.event_name} - ${event.rp_score}`).join('\n');
     
 }
+
+export const getEvent = async(eventKey:string):Promise<EventSimple> => {
+    return api.getEventSimple(eventKey);
+}
