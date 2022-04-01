@@ -25,7 +25,9 @@ export abstract class HttpClient {
   private _handleResponse = ({ data }: AxiosResponse) => data;
 
   protected _handleError = (error: any) => {
-    console.log(error);
+    if (process.env.NODE_ENV != 'production'){
+      console.log(error);
+    }
     
     Promise.reject(error);
   }
