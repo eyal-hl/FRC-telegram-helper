@@ -19,6 +19,7 @@ const addDateBetweenGames = (matches_array:Match[]):(Match|Date)[] => {
 }
 
 async function formatMatchOrDate(matchOrDate:any):Promise<string>{ // the type is match or a Date
+    const divider = '\n--------------------------';
     const formatVideos = (videos:Video[]):string => {
         if (videos.length < 1){
             return "No videos on TBA"
@@ -41,11 +42,13 @@ async function formatMatchOrDate(matchOrDate:any):Promise<string>{ // the type i
     if (matchOrDate instanceof Date){
         return "\n" + matchOrDate.toDateString();
     }
+    
     const match:Match = matchOrDate;
     if (match.winning_alliance == ""){
-        return `${match.match_number} ${formatTime(new Date(match.predicted_time))} - ${formatAlliance(match.alliances.blue)} vs ${formatAlliance(match.alliances.red)} ${match.favorite_teams!=1?match.favorite_teams:""}`
+        // return `${match.match_number} ${formatTime(new Date(match.predicted_time))} - ${formatAlliance(match.alliances.blue)} vs ${formatAlliance(match.alliances.red)} ${match.favorite_teams!=1?match.favorite_teams:""}${divider}`
+        return `${await formatMatchName(match)} ${formatTime(new Date(match.predicted_time))}\n${formatAlliance(match.alliances.blue)} vs ${formatAlliance(match.alliances.red)}${divider}`
     }
-    return `${await formatMatchName(match)} ${formatTime(new Date(match.predicted_time))}\n${formatAlliance(match.alliances.blue)} ${match.alliances.blue.score} vs ${match.alliances.red.score} ${formatAlliance(match.alliances.red)} ${match.favorite_teams!=1?match.favorite_teams:""}\n${formatVideos(match.videos)}`
+    return `${await formatMatchName(match)} ${formatTime(new Date(match.predicted_time))}\n${formatAlliance(match.alliances.blue)} ${match.alliances.blue.score} vs ${match.alliances.red.score} ${formatAlliance(match.alliances.red)}\n${formatVideos(match.videos)}${divider}`
 }
 
 const sortedMatches = async(teams:string):Promise<Match[]> => {
@@ -62,6 +65,19 @@ export const futureMatches = async(teams:string):Promise<string> => {
 
 export const allMatches =async (teams:string): Promise<string> => {
     let result:Promise<string>[] = addDateBetweenGames((await sortedMatches(teams))).map(formatMatchOrDate);
+    
+    return (await Promise.all(result)).join('\n');
+};
+
+export const futureGoodMatches = async(teams:string):Promise<string> => {
+    const yesterDay = new Date()
+    yesterDay.setTime(yesterDay.getTime() - 86400000); // 1 day in ms
+    let result:Promise<string>[] = addDateBetweenGames((await sortedMatches(teams)).filter(match=>match.winning_alliance===""&& match.predicted_time > yesterDay.valueOf() && (match.favorite_teams??0)>1)).map(formatMatchOrDate);
+    return (await Promise.all(result)).join('\n');
+};
+
+export const allGoodMatches =async (teams:string): Promise<string> => {
+    let result:Promise<string>[] = addDateBetweenGames(((await sortedMatches(teams)).filter(match=>(match.favorite_teams??0)>1))).map(formatMatchOrDate);
     
     return (await Promise.all(result)).join('\n');
 };
