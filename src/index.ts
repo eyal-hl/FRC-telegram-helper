@@ -46,7 +46,10 @@ bot.hears('hi', (ctx:Context) => ctx.reply('Hey there'))
 bot.on('text', async (ctx)=>{
     console.log(`${ctx.message.chat.id}: ${ctx.message.text}`);
     
-    splitMessage(await router(ctx.message.text)).forEach(async line => await ctx.reply(line))
+    const messages = splitMessage(await router(ctx.message.text));
+    for (let index = 0; index < messages.length; index++) {
+        await ctx.reply(messages[index]);
+    }
 })
 
 
