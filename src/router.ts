@@ -6,7 +6,7 @@ const no_param:{[name:string]: ()=>{}} = {}
 const one_param:{[name:string]: (one:string)=>Promise<string>} = {"team":team, "matches":futureMatches, "events": eventsYear, "allmatches":allMatches, "eventscore":eventRpRank, "allgoodmatches":allGoodMatches, "goodmatches":futureGoodMatches}
 
 export const router = async(text:string):Promise<string> => {
-    let texts:string[] = text.split(" ");
+    let texts:string[] = text.replace(', ', ',').split(" ");
     texts[0] = texts[0].toLowerCase();
     
     switch (texts.length) {
