@@ -29,6 +29,10 @@ matches {teams seperated by ','} - will return you all future matches of those t
 
 all matches {teams seperated by ','} - same us above but all matches instead of only future once, for example "allmatches 1937,254"
 
+good matches {teams seperated by ','} - same as above but filters out games that have less then 2 favorite teams
+
+all good matches {teams seperated by ','} - same as above but filters out games that have less then 2 favorite teams
+
 event score {year} - will rank all events in the year based on the average rp score for team in the event (strengh of event)`
 
 const PORT = process.env.PORT || "3000";
