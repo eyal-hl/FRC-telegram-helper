@@ -27,13 +27,22 @@ const helpMessage = `All times are in israel time
 
 matches {teams seperated by ','} - will return you all future matches of those teams sorted by amount of favorite teams in match and then by time, for example "matches 1937,254"
 
+If there are no future matches for those teams or one of the teams is not real there will not be a response
+
 all matches {teams seperated by ','} - same us above but all matches instead of only future once, for example "allmatches 1937,254"
+
+if one or more of the teams are not real there will not be a response
+
 
 good matches {teams seperated by ','} - same as above but filters out games that have less then 2 favorite teams
 
+
 all good matches {teams seperated by ','} - same as above but filters out games that have less then 2 favorite teams
 
-event score {year} - will rank all events in the year based on the average rp score for team in the event (strengh of event)`
+
+event score {year} - will rank all events in the year based on the average rp score for team in the event (strengh of event)
+
+source code: https://github.com/eyal-hl/telegram-bot`
 
 const PORT = process.env.PORT || "3000";
 const HEROKU_URL = process.env.HEROKU_URL;
