@@ -18,7 +18,7 @@ const addDateBetweenGames = (matches_array:Match[]):(Match|Date)[] => {
     return result;
 }
 const unResolvedMatch = (match:Match):boolean=>{
-    return (match.winning_alliance == "" && match.alliances.red.score == 0 && match.alliances.blue.score == 0)
+    return (match.winning_alliance == "" && ((match.alliances.red.score == -1 && match.alliances.blue.score == -1) || (match.alliances.red.score == 0 && match.alliances.blue.score == 0)))
 }
 async function formatMatchOrDate(matchOrDate:any):Promise<string>{ // the type is match or a Date
     const divider = '\n--------------------------';
