@@ -4,6 +4,9 @@ import { getEvent } from './events';
 const formatAlliance = (alliance:Alliance):string=> `${alliance.team_keys.map(key=>key.slice(3)).join(' ')}`
 
 const addDateBetweenGames = (matches_array:Match[]):(Match|Date)[] => {
+    if (matches_array.length==0){
+        return []
+    }
     let result:(Match|Date)[] = []
     result.push(new Date(matches_array[0].predicted_time));
     result.push(matches_array[0]);
@@ -61,27 +64,42 @@ const sortedMatches = async(teams:string):Promise<Match[]> => {
 export const futureMatches = async(teams:string):Promise<string> => {
     const yesterDay = new Date()
     yesterDay.setTime(yesterDay.getTime() - 86400000); // 1 day in ms
-    let result:Promise<string>[] = addDateBetweenGames((await sortedMatches(teams)).filter(match=>unResolvedMatch(match)&& match.predicted_time > yesterDay.valueOf())).map(formatMatchOrDate);
-    return (await Promise.all(result)).join('\n');
+    const promiseResult:Promise<string>[] = addDateBetweenGames((await sortedMatches(teams)).filter(match=>unResolvedMatch(match)&& match.predicted_time > yesterDay.valueOf())).map(formatMatchOrDate);
+    const result = await Promise.all(promiseResult);
+    if (result.length==0){
+        return "No future games for those teams";
+    }
+    return result.join('\n');
 };
 
 export const allMatches =async (teams:string): Promise<string> => {
-    let result:Promise<string>[] = addDateBetweenGames((await sortedMatches(teams))).map(formatMatchOrDate);
+    const promiseResult:Promise<string>[] = addDateBetweenGames((await sortedMatches(teams))).map(formatMatchOrDate);
     
-    return (await Promise.all(result)).join('\n');
+    const result = await Promise.all(promiseResult);
+    if (result.length==0){
+        return "No games for those teams";
+    }
+    return result.join('\n')
 };
 
 export const futureGoodMatches = async(teams:string):Promise<string> => {
     const yesterDay = new Date()
     yesterDay.setTime(yesterDay.getTime() - 86400000); // 1 day in ms
-    let result:Promise<string>[] = addDateBetweenGames((await sortedMatches(teams)).filter(match=>unResolvedMatch(match)&& match.predicted_time > yesterDay.valueOf() && (match.favorite_teams??0)>1)).map(formatMatchOrDate);
-    return (await Promise.all(result)).join('\n');
+    const promiseResult:Promise<string>[] = addDateBetweenGames((await sortedMatches(teams)).filter(match=>unResolvedMatch(match)&& match.predicted_time > yesterDay.valueOf() && (match.favorite_teams??0)>1)).map(formatMatchOrDate);
+    const result = await Promise.all(promiseResult);
+    if (result.length==0){
+        return "No future games that have atleast 2 of those teams";
+    }
+    return result.join('\n')
 };
 
 export const allGoodMatches =async (teams:string): Promise<string> => {
-    let result:Promise<string>[] = addDateBetweenGames(((await sortedMatches(teams)).filter(match=>(match.favorite_teams??0)>1))).map(formatMatchOrDate);
-    
-    return (await Promise.all(result)).join('\n');
+    const promiseResult:Promise<string>[] = addDateBetweenGames(((await sortedMatches(teams)).filter(match=>(match.favorite_teams??0)>1))).map(formatMatchOrDate);
+    const result = await Promise.all(promiseResult);
+    if (result.length==0){
+        return "No games that have atleast 2 of those teams";
+    }
+    return result.join('\n')
 };
 
 export const matches = async(teams:string, year:string):Promise<Match[]> => {
