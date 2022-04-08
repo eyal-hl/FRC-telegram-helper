@@ -106,7 +106,13 @@ export const matches = async(teams:string, year:string):Promise<Match[]> => {
     let matches:Match[] = [];
     let teamsArray = teams.split(',');
     for (let index = 0; index < teamsArray.length; index++) {
-         matches.push(...(await api.getMatchesTeamYear(teamsArray[index], year)));
+        let temp:Match[] = [];
+        try{
+            temp = await api.getMatchesTeamYear(teamsArray[index], year)
+        }catch(e){}finally{
+            matches.push(...temp);
+        }
+        
     }
 
     matches.forEach((match,index) => {

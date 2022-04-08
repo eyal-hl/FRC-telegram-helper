@@ -28,7 +28,6 @@ export abstract class HttpClient {
     if (process.env.NODE_ENV != 'production'){
       console.log(error);
     }
-    
-    Promise.reject(error);
+    throw "No team i geuss";
   }
 }
