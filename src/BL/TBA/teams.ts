@@ -59,3 +59,20 @@ export const topTeamsWinRate = async (year: string): Promise<string> => {
   teams.splice(100);
   return teams.map((team,index) => `${index+1}. ${team.team.slice(3)} - wins:${team.record.wins}, loses:${team.record.losses}, ties:${team.record.ties}`).join("\n");
 };
+
+export const topTeamsStats = async (year:string): Promise<string> => {
+    const teams: TeamRecord[] = await teamsWinRate(year);
+    const winrate = JSON.parse(JSON.stringify(teams.sort((a,b)=>((b.record.wins/(b.record.wins+b.record.losses+b.record.ties)) - (a.record.wins/(a.record.wins+a.record.losses+a.record.ties))||(b.record.wins - a.record.wins))))); // winrate
+    const losses = JSON.parse(JSON.stringify(teams.sort((a,b)=> b.record.losses - a.record.losses))); // loses
+    const wins = JSON.parse(JSON.stringify(teams.sort((a,b)=> b.record.wins - a.record.wins))); // wins
+    const ties = JSON.parse(JSON.stringify(teams.sort((a,b)=> b.record.ties - a.record.ties))); // ties
+    winrate.splice(10);
+    losses.splice(10);
+    wins.splice(10);
+    ties.splice(10);
+    let result:string = "WinRate:\n" + winrate.map((team:any,index:any) => `${index+1}. ${team.team.slice(3)} - wins:${team.record.wins}, loses:${team.record.losses}, ties:${team.record.ties}`).join("\n") + "\n\n";
+    result += "Wins:\n" + wins.map((team:any,index:any) => `${index+1}. ${team.team.slice(3)} - wins:${team.record.wins}, loses:${team.record.losses}, ties:${team.record.ties}`).join("\n") + "\n\n";
+    result += "Losses:\n" + losses.map((team:any,index:any) => `${index+1}. ${team.team.slice(3)} - wins:${team.record.wins}, loses:${team.record.losses}, ties:${team.record.ties}`).join("\n") + "\n\n";
+    result += "Ties:\n" + ties.map((team:any,index:any) => `${index+1}. ${team.team.slice(3)} - wins:${team.record.wins}, loses:${team.record.losses}, ties:${team.record.ties}`).join("\n");
+    return result;
+}

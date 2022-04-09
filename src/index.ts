@@ -42,6 +42,10 @@ all good matches {teams seperated by ','} - same as above but filters out games 
 
 event score {year} - will rank all events in the year based on the average rp score for team in the event (strengh of event)
 
+winrate {year} - will return the top 100 teams sorted by winrate in official events
+
+stats {year} - will return the top 10 teams sorted by winrate/wins/losses/ties in official events
+
 source code: https://github.com/eyal-hl/telegram-bot`
 
 const PORT = process.env.PORT || "3000";
@@ -65,6 +69,8 @@ bot.on('text', async (ctx)=>{
             await ctx.reply(messages[index]);
         }
     }catch(e){
+        console.log(e);
+        
         ctx.reply("error")
     }
 })
