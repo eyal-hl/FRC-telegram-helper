@@ -154,3 +154,67 @@ interface Extrastatsinfo {
   name: string;
   precision: number;
 }
+
+interface teamStatusInEvent {
+  alliance?: PlayoffAllianceInfo;
+  alliance_status_str: string;
+  last_match_key: string;
+  next_match_key?: string;
+  overall_status_str: string;
+  playoff?: Playoff;
+  playoff_status_str: string;
+  qual: Qualification;
+}
+
+interface PlayoffAllianceInfo {
+  backup?: Backup;
+  name: string;
+  number: number;
+  pick: number;
+}
+
+interface Backup {
+  in: string;
+  out: string;
+}
+
+interface Qualification {
+  num_teams: number;
+  ranking: RankingStatus;
+  sort_order_info: Sortorderinfo[];
+  status: string;
+}
+
+interface Sortorderinfo {
+  name: string;
+  precision: number;
+}
+
+interface RankingStatus {
+  dq: number;
+  matches_played: number;
+  qual_average?: any;
+  rank: number;
+  record: Currentlevelrecord;
+  sort_orders: number[];
+  team_key: string;
+}
+
+interface Playoff {
+  current_level_record: Currentlevelrecord;
+  level: string;
+  playoff_average?: any;
+  record: Currentlevelrecord;
+  status: string;
+}
+
+interface Currentlevelrecord {
+  losses: number;
+  ties: number;
+  wins: number;
+}
+
+interface TeamRecord {
+  team:string;
+  record:Currentlevelrecord;
+}

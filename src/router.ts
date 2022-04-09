@@ -1,9 +1,9 @@
-import {team} from './BL/TBA/teams'
+import {team, topTeamsWinRate} from './BL/TBA/teams'
 import {futureMatches, allMatches, futureGoodMatches, allGoodMatches} from './BL/TBA/matches'
 import {eventsYear, eventRpRank} from './BL/TBA/events'
 
 const no_param:{[name:string]: ()=>{}} = {}
-const one_param:{[name:string]: (one:string)=>Promise<string>} = {"team":team, "matches":futureMatches, "events": eventsYear, "allmatches":allMatches, "eventscore":eventRpRank, "allgoodmatches":allGoodMatches, "goodmatches":futureGoodMatches}
+const one_param:{[name:string]: (one:string)=>Promise<string>} = {"team":team, "matches":futureMatches, "events": eventsYear, "allmatches":allMatches, "eventscore":eventRpRank, "allgoodmatches":allGoodMatches, "goodmatches":futureGoodMatches, "winrate":topTeamsWinRate}
 
 export const router = async(text:string):Promise<string> => {
     let texts:string[] = text.replace(', ', ',').split(" ");
