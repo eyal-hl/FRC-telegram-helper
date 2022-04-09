@@ -20,16 +20,18 @@ const teamsWinRate = async (year: string): Promise<TeamRecord[]> => {
 
   eventsRankings.forEach((eventStatus: Map<string, teamStatusInEvent>) => {
     eventStatus.forEach((value, key) => {
-      if (value && value.qual) {
+      if (value) {
         const record: MatchesRecord = teamsRanking.get(key) ?? {
           losses: 0,
           ties: 0,
           wins: 0,
         };
+        if (value.qual){
+            record.losses += value.qual.ranking.record.losses;
+            record.wins += value.qual.ranking.record.wins;
+            record.ties += value.qual.ranking.record.ties;
+        }
 
-        record.losses += value.qual.ranking.record.losses;
-        record.wins += value.qual.ranking.record.wins;
-        record.ties += value.qual.ranking.record.ties;
 
         if (value.playoff) {
           record.losses += value.playoff.record.losses;
