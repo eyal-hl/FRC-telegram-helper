@@ -45,6 +45,7 @@ interface Homechampionship {
 }
 
 interface Match {
+  event_type?: number;
   actual_time?: number;
   alliances: Alliances;
   comp_level: string;
@@ -72,45 +73,7 @@ interface Scorebreakdown {
 }
 
 interface AllianceScore {
-  adjustPoints: number;
-  autoCargoLowerBlue: number;
-  autoCargoLowerFar: number;
-  autoCargoLowerNear: number;
-  autoCargoLowerRed: number;
-  autoCargoPoints: number;
-  autoCargoTotal: number;
-  autoCargoUpperBlue: number;
-  autoCargoUpperFar: number;
-  autoCargoUpperNear: number;
-  autoCargoUpperRed: number;
-  autoPoints: number;
-  autoTaxiPoints: number;
-  cargoBonusRankingPoint: boolean;
-  endgamePoints: number;
-  endgameRobot1: string;
-  endgameRobot2: string;
-  endgameRobot3: string;
-  foulCount: number;
-  foulPoints: number;
-  hangarBonusRankingPoint: boolean;
-  matchCargoTotal: number;
-  quintetAchieved: boolean;
   rp: number;
-  taxiRobot1: string;
-  taxiRobot2: string;
-  taxiRobot3: string;
-  techFoulCount: number;
-  teleopCargoLowerBlue: number;
-  teleopCargoLowerFar: number;
-  teleopCargoLowerNear: number;
-  teleopCargoLowerRed: number;
-  teleopCargoPoints: number;
-  teleopCargoTotal: number;
-  teleopCargoUpperBlue: number;
-  teleopCargoUpperFar: number;
-  teleopCargoUpperNear: number;
-  teleopCargoUpperRed: number;
-  teleopPoints: number;
   totalPoints: number;
 }
 
