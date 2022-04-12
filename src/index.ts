@@ -46,6 +46,8 @@ winrate {year} - will return the top 100 teams sorted by winrate in official eve
 
 stats {year} - will return the top 10 teams sorted by winrate/wins/losses/ties in official events
 
+4rp {team} {year} - Will return the percent and total of qual games the team got 4 rp in official play
+
 source code: https://github.com/eyal-hl/telegram-bot`
 
 const PORT = process.env.PORT || "3000";
