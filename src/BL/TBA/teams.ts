@@ -79,6 +79,11 @@ export const topTeamsStats = async (year:string): Promise<string> => {
     return result;
 }
 const getMatchRP = (match:Match, team:string):number => {
+  
+  if (match.score_breakdown && (match.event_key.includes("2017") || match.event_key.includes("2016"))){
+    match.score_breakdown.blue.rp = match.score_breakdown.blue.tba_rpEarned;
+    match.score_breakdown.red.rp = match.score_breakdown.red.tba_rpEarned;
+  }
   if (match.alliances.blue.team_keys.includes("frc"+team)){
     return match.score_breakdown?.blue.rp ?? 0;
   }

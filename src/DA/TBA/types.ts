@@ -73,7 +73,8 @@ interface Scorebreakdown {
 }
 
 interface AllianceScore {
-  rp: number;
+  rp?: number;
+  tba_rpEarned?: number;
   totalPoints: number;
 }
 
