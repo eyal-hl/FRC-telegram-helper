@@ -1,26 +1,27 @@
-if (process.env.NODE_ENV != 'production'){ require('dotenv').config(); }
-import { json } from "stream/consumers";
+if (process.env.NODE_ENV != "production") {
+  require("dotenv").config();
+}
 import { Context, Telegraf } from "telegraf";
 import { router } from "./router";
 
 const maxMessageSize = 4096;
-const splitMessage = (message:string):string[] => {
-    let lines = message.split('\n');
-    let reply:string[] = [];
-    let currPart = "";
+const splitMessage = (message: string): string[] => {
+  let lines = message.split("\n");
+  let reply: string[] = [];
+  let currPart = "";
 
-    lines.forEach(line => {
-        if (currPart.length + line.length + 1 >= maxMessageSize){
-            reply.push(currPart);
-            currPart = "";
-        }
-        currPart += line + '\n';
-    })
+  lines.forEach((line) => {
+    if (currPart.length + line.length + 1 >= maxMessageSize) {
+      reply.push(currPart);
+      currPart = "";
+    }
+    currPart += line + "\n";
+  });
 
-    reply.push(currPart)
+  reply.push(currPart);
 
-    return reply
-}
+  return reply;
+};
 const helpMessage = `All times are in israel time
 
 
@@ -48,49 +49,47 @@ stats {year} - will return the top 10 teams sorted by winrate/wins/losses/ties i
 
 4rp {team} {year} - Will return the percent and total of qual games the team got 4 rp in official play
 
-source code: https://github.com/eyal-hl/telegram-bot`
+source code: https://github.com/eyal-hl/telegram-bot`;
 
-const PORT = process.env.PORT || "3000";
-const HEROKU_URL = process.env.HEROKU_URL;
-const bot = new Telegraf(process.env.BOT_TOKEN||"")
+const bot = new Telegraf(process.env.BOT_TOKEN || "");
 
-bot.use(async (ctx:Context, next:()=>Promise<void>) => {
+bot.use(async (ctx: Context, next: () => Promise<void>) => {
     next();
-})
+});
 
-bot.start((ctx:Context) => ctx.reply('Welcome, type "/help" for commands'))
-bot.help((ctx:Context) => ctx.reply(helpMessage))
-bot.on('sticker', (ctx:Context) => ctx.reply('👍'))
-bot.hears('hi', (ctx:Context) => ctx.reply('Hey there'))
-bot.on('text', async (ctx)=>{
+bot.start((ctx: Context) => ctx.reply('Welcome, type "/help" for commands'));
+bot.help((ctx: Context) => ctx.reply(helpMessage));
+bot.on("sticker", (ctx: Context) => ctx.reply("👍"));
+bot.hears("hi", (ctx: Context) => ctx.reply("Hey there"));
+bot.on("text", async (ctx) => {
     console.log(`${ctx.message.chat.id}: ${ctx.message.text}`);
-    try{
-
+    try {
         const messages = splitMessage(await router(ctx.message.text));
         for (let index = 0; index < messages.length; index++) {
             await ctx.reply(messages[index]);
         }
-    }catch(e){
+    } catch (e) {
         console.log(e);
         
-        ctx.reply("error")
+        ctx.reply("error");
     }
-})
+});
 
 
-
-if (process.env.NODE_ENV === 'production') {
-    bot.launch({
-        webhook: {
-            domain: HEROKU_URL,
-            port: parseInt(PORT)
-        }
-    })
-} else {
-    bot.launch()
-}
-
+// Old heroku stuff
+// const HEROKU_URL = process.env.HEROKU_URL;
+// const PORT = process.env.PORT || "3000";
+// if (process.env.NODE_ENV === 'production') {
+//     bot.launch({
+//         webhook: {
+//             domain: HEROKU_URL,
+//             port: parseInt(PORT)
+//         }
+//     })
+// } else {
+bot.launch();
+// }
 
 // Enable graceful stop
-process.once('SIGINT', () => bot.stop('SIGINT'))
-process.once('SIGTERM', () => bot.stop('SIGTERM'))
+process.once("SIGINT", () => bot.stop("SIGINT"));
+process.once("SIGTERM", () => bot.stop("SIGTERM"));
